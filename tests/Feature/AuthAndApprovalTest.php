@@ -3,11 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class AuthAndApprovalTest extends TestCase
 {
+    use DatabaseTransactions;
     public function test_guest_can_register_and_gets_pending_status_with_qr_token(): void
     {
         $response = $this->post('/register', [
@@ -53,7 +54,10 @@ class AuthAndApprovalTest extends TestCase
     public function test_secretary_can_approve_pending_member(): void
     {
         $sekre = User::where('role', 'secretary')->first();
-        $pendingMember = User::where('email', 'kevin@test.com')->first();
+        $pendingMember = User::factory()->create([
+            'status' => 'pending',
+            'role' => 'member',
+        ]);
 
         $response = $this->actingAs($sekre)->post("/admin/members/{$pendingMember->id}/approve");
 
@@ -64,11 +68,15 @@ class AuthAndApprovalTest extends TestCase
 
     public function test_approved_member_can_login_and_access_dashboard_and_badge(): void
     {
-        $member = User::where('email', 'kevin@test.com')->first();
+        $member = User::factory()->create([
+            'name' => 'Approved Member User',
+            'status' => 'approved',
+            'role' => 'member',
+        ]);
 
         $response = $this->actingAs($member)->get('/dashboard');
         $response->assertStatus(200);
-        $response->assertSee('Kevin Sanjaya');
+        $response->assertSee('Approved Member User');
 
         $badgeResponse = $this->actingAs($member)->get('/my-badge');
         $badgeResponse->assertStatus(200);
