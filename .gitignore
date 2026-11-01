@@ -1,0 +1,27 @@
+# Environment & Keys
+.env
+.env.backup
+.env.production
+local.properties
+*.key
+*.keystore
+
+# Dependencies & Build
+/vendor/
+/node_modules/
+/public/storage
+/public/hot
+/storage/*.key
+npm-debug.log
+yarn-error.log
+
+# IDE & Editor
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
