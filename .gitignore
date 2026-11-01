@@ -18,6 +18,7 @@ yarn-error.log
 # IDE & Editor
 .idea/
 .vscode/
+.phpunit.result.cache
 *.suo
 *.ntvs*
 *.njsproj

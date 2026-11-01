@@ -13,7 +13,7 @@ Target: Sistem Operasional Presensi & Rekapitulasi UKM Bulutangkis (Mobile-First
 | 1 | Konsep & Requirement | Finalisasi scope, batasan sistem, dokumen requirements & prioritas | [x] DONE |
 | 2 | Perancangan Sistem | Aktor, alur/state, aturan keamanan, data model (ERD/skema), arsitektur UI | [x] DONE |
 | 3 | Project Setup & Scaffold | Inisialisasi framework Laravel, database migration, seeding role awal | [x] DONE |
-| 4 | Authentication & Profile | Login, Register anggota, persetujuan akun sekretaris, profil (NIM, kampus, foto) | [ ] TODO |
+| 4 | Authentication & Profile | Login, Register anggota, persetujuan akun sekretaris, profil (NIM, kampus, foto) | [x] DONE |
 | 5 | Manajemen Sesi Latihan | Buat/tutup sesi latihan oleh sekretaris, status sesi aktif | [ ] TODO |
 | 6 | QR Presensi & Scanner | Generate QR Badge unik anggota, modul scanner kamera sekretaris, fallback manual | [ ] TODO |
 | 7 | Dashboard & Rekapitulasi | Dashboard admin/sekretaris (kehadiran real-time), dashboard anggota, ekspor Excel/PDF | [ ] TODO |
@@ -27,3 +27,4 @@ Target: Sistem Operasional Presensi & Rekapitulasi UKM Bulutangkis (Mobile-First
 - **2026-11-01**: Pemangkasan modul tagihan/kas (D-01). Perubahan alur presensi menjadi Admin-Scan-Anggota (D-02) dengan secure UUID token (D-03).
 - **2026-11-01**: Fase 1 (Konsep & Requirement) & Fase 2 (Perancangan Desain Lengkap) rampung (`docs/01`–`docs/07` dan `DECISIONS.md`).
 - **2026-11-01**: Fase 3 DONE. Framework Laravel scaffolded, skema basis data MySQL selesai dimigrasi (users, training_sessions, attendances, activity_logs), seeder role akun awal (Admin, Sekretaris, Member) sukses di-seed dan diverifikasi.
+- **2026-11-01**: Fase 4 DONE. Autentikasi multi-role (Admin, Sekretaris, Member), registrasi anggota auto UUID token QR, middleware approval & role, verifikasi akun pending oleh sekretaris, dashboard anggota, halaman QR Badge personal, dan pengujian feature test (4 passed, 16 assertions).

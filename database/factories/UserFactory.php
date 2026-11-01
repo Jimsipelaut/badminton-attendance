@@ -27,8 +27,13 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'nim' => fake()->numerify('1221####'),
+            'university' => 'Universitas Indonesia',
+            'phone_number' => '08' . fake()->numerify('##########'),
+            'qr_token' => 'urn:ukm-badminton:token:' . Str::uuid(),
+            'role' => 'member',
+            'status' => 'approved',
             'remember_token' => Str::random(10),
         ];
     }
