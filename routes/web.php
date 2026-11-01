@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminMemberController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SessionController;
@@ -39,16 +40,18 @@ Route::middleware('auth')->group(function () {
             return view('admin.dashboard');
         })->name('dashboard');
 
-        // Manajemen Sesi Latihan
+        // Manajemen Sesi Latihan & Presensi
         Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
         Route::get('/sessions/create', [SessionController::class, 'create'])->name('sessions.create');
         Route::post('/sessions', [SessionController::class, 'store'])->name('sessions.store');
         Route::post('/sessions/{id}/activate', [SessionController::class, 'activate'])->name('sessions.activate');
         Route::post('/sessions/{id}/close', [SessionController::class, 'close'])->name('sessions.close');
         Route::post('/sessions/{id}/cancel', [SessionController::class, 'cancel'])->name('sessions.cancel');
-        Route::get('/sessions/{id}/scanner', function ($id) {
-            return redirect()->route('admin.sessions.index')->with('info', 'Scanner siap diimplementasikan pada Fase 6.');
-        })->name('sessions.scanner');
+
+        // Presensi Scanner & Fallback Manual (Fase 6)
+        Route::get('/sessions/{id}/scanner', [AttendanceController::class, 'scanner'])->name('sessions.scanner');
+        Route::post('/sessions/{id}/scan', [AttendanceController::class, 'scan'])->name('sessions.scan');
+        Route::post('/sessions/{id}/manual', [AttendanceController::class, 'manualAttendance'])->name('sessions.manual');
 
         // Manajemen Anggota & Approval
         Route::get('/members', [AdminMemberController::class, 'index'])->name('members.index');
