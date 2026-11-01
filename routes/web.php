@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminMemberController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
 
@@ -59,8 +60,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/members/{id}/approve', [AdminMemberController::class, 'approve'])->name('members.approve');
         Route::post('/members/{id}/reject', [AdminMemberController::class, 'reject'])->name('members.reject');
 
-        Route::get('/reports', function () {
-            return view('admin.reports.index');
-        })->name('reports.index');
+        // Rekapitulasi Presensi & Ekspor (Fase 7)
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/session/{id}', [ReportController::class, 'sessionDetail'])->name('reports.session');
+        Route::get('/reports/export/session/{id}', [ReportController::class, 'exportSession'])->name('reports.export.session');
+        Route::get('/reports/export/members', [ReportController::class, 'exportMembers'])->name('reports.export.members');
     });
 });
