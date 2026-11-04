@@ -25,6 +25,49 @@ Dokumentasi teknis lengkap dan arsitektur tersimpan di folder `docs/`:
 - [`docs/05-security-and-rules.md`](docs/05-security-and-rules.md) — Aturan keamanan token QR dan audit trail.
 - [`docs/06-data-model.md`](docs/06-data-model.md) — Struktur tabel basis data relasional (MySQL).
 - [`docs/07-architecture-ui-flow.md`](docs/07-architecture-ui-flow.md) — Desain antarmuka, navigasi mobile, dan arsitektur aplikasi.
+- [`docs/08-deployment-guide.md`](docs/08-deployment-guide.md) — Panduan deployment produksi Alwaysdata (Rp0) / VPS & cron backup.
+
+---
+
+## 🚀 Panduan Cepat Menjalankan Sistem
+
+### 1. Menjalankan di Lingkungan Lokal
+```bash
+# Salin konfigurasi environment
+cp .env.example .env
+
+# Pasang dependensi
+composer install
+
+# Buat application key
+php artisan key:generate
+
+# Migrasi & isi data awal (Admin, Sekretaris, Member default)
+php artisan migrate:fresh --seed
+
+# Hubungkan direktori storage foto profil
+php artisan storage:link
+
+# Jalankan server lokal
+php artisan serve
+```
+
+Akun bawaan seeder:
+- **Admin**: `admin@badminton.org` (Password: `password`)
+- **Sekretaris**: `sekretaris@badminton.org` (Password: `password`)
+- **Member**: `member@badminton.org` (Password: `password`)
+
+### 2. Menjalankan Seluruh Automated Test
+```bash
+php artisan test
+# Output: 25 tests passed, 201 assertions green
+```
+
+### 3. Deploy ke Produksi (Alwaysdata / VPS)
+Ikuti panduan lengkap di [`docs/08-deployment-guide.md`](docs/08-deployment-guide.md) atau jalankan:
+```bash
+./deploy.sh
+```
 
 ---
 
