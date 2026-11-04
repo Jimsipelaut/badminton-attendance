@@ -18,7 +18,7 @@ Target: Sistem Operasional Presensi & Rekapitulasi UKM Bulutangkis (Mobile-First
 | 6 | QR Presensi & Scanner | Generate QR Badge unik anggota, modul scanner kamera sekretaris, fallback manual | [x] DONE |
 | 7 | Dashboard & Rekapitulasi | Dashboard admin/sekretaris (kehadiran real-time), dashboard anggota, ekspor Excel/PDF | [x] DONE |
 | 8 | Pengujian Lapangan | Uji coba scan multi-perangkat di sesi latihan riil, penyesuaian UX | [x] DONE |
-| 9 | Deployment | Setup hosting produksi (Alwaysdata/VPS), konfigurasi domain, SSL & cron backup | [ ] TODO |
+| 9 | Deployment | Setup hosting produksi (Alwaysdata/VPS), konfigurasi domain, SSL & cron backup | [x] DONE |
 
 ---
 
@@ -32,3 +32,4 @@ Target: Sistem Operasional Presensi & Rekapitulasi UKM Bulutangkis (Mobile-First
 - **2026-11-01**: Fase 6 DONE. Modul QR Presensi & Scanner kamera HTML5 WebRTC (`html5-qrcode`), kartu verifikasi visual anti-joki (tampilkan foto, NIM, nama, kampus FR-ABSEN-02), feedback sintetis Web Audio API beep, pencegahan presensi ganda di sesi yang sama (FR-ABSEN-03), fallback presensi manual sekretaris (FR-ABSEN-04), dan daftar hadir sesi real-time. Pengujian 8 test case lolos (total suite: 18 tests green, 53 assertions).
 - **2026-11-01**: Fase 7 DONE. Modul Dashboard & Rekapitulasi Presensi (rekap per sesi dengan filter rentang tanggal, rekap per anggota dengan kalkulasi persentase kehadiran, halaman detail kehadiran per sesi latihan, dan stream ekspor file CSV standar UTF-8 BOM untuk Microsoft Excel & Google Sheets tanpa beban library berat). Pengujian 5 test case lolos (total suite: 23 tests green, 72 assertions).
 - **2026-11-01**: Fase 8 DONE. Pengujian Lapangan & Penyesuaian UX Riil: simulasi pemindaian beruntun 20 anggota di lapangan (< 500ms per scan NFR-PERF), validasi anti-duplikasi, penolakan akun pending, fallback manual dengan catatan alasan, sinkronisasi realtime status hadir di riwayat anggota, dan ekspor CSV konsisten. Penyesuaian UX: Mode Fast-Scan (antrean padat dengan cooldown 1.0s), haptic vibration feedback via `navigator.vibrate` untuk suasana bising GOR, WakeLock API & tips kecerahan layar pada QR Badge anggota, serta filter pencarian instan pada tab presensi manual. Total suite: 25 tests green, 201 assertions.
+- **2026-11-04**: Fase 9 DONE. Setup Deployment Produksi: panduan hosting produksi Alwaysdata Rp0 dan VPS Linux di `docs/08-deployment-guide.md`, template environment produksi `.env.production.example`, script deployment otomatis `deploy.sh`, root fallback `.htaccess`, serta pembuatan command otomatis pencadangan database harian `php artisan db:backup` dengan retensi 7 hari untuk mematuhi kuota hosting 100 MB. Seluruh 9 fase pengembangan selesai 100%.
