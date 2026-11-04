@@ -25,6 +25,12 @@
             <div id="qrcode" class="flex justify-center"></div>
         </div>
 
+        <!-- Field Tip for Badminton Court -->
+        <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-2xl text-[11px] text-amber-900 flex items-center space-x-2 text-left">
+            <span class="text-base shrink-0">💡</span>
+            <span><strong>Tips Lapangan:</strong> Naikkan kecerahan layar HP ke tingkat maksimal agar kamera pemindai membaca QR seketika di pencahayaan GOR.</span>
+        </div>
+
         <p class="text-xs text-slate-500 font-medium max-w-xs mx-auto">
             Sodorkan QR Code ini ke kamera smartphone Sekretaris di meja presensi lapangan.
         </p>
@@ -65,6 +71,20 @@
             colorLight: "#FFFFFF",
             correctLevel: QRCode.CorrectLevel.H
         });
+
+        // Cegah layar sleep saat menunggu antrean presensi di lapangan
+        if ('wakeLock' in navigator) {
+            let wakeLock = null;
+            const requestWakeLock = async () => {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                } catch (err) {}
+            };
+            requestWakeLock();
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') requestWakeLock();
+            });
+        }
     });
 </script>
 @endsection

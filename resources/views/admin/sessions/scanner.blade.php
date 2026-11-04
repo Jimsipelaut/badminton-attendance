@@ -42,6 +42,14 @@
                     Matikan Kamera
                 </button>
             </div>
+            
+            <div class="mt-3 flex items-center justify-between px-2 pt-2.5 border-t border-slate-800 text-[11px] text-slate-300">
+                <label class="flex items-center space-x-2 cursor-pointer select-none">
+                    <input type="checkbox" id="fastScanToggle" class="rounded border-slate-700 text-emerald-500 focus:ring-0">
+                    <span>⚡ Mode Fast-Scan (Antrean Padat)</span>
+                </label>
+                <span id="scanStatusBadge" class="text-[10px] text-slate-400">FPS: 15</span>
+            </div>
             <p id="scanStatusText" class="text-[11px] text-slate-400 mt-2">Arahkan kamera ke QR Badge di HP anggota.</p>
         </div>
 
@@ -78,11 +86,15 @@
             <form action="{{ route('admin.sessions.manual', $session->id) }}" method="POST" class="space-y-3">
                 @csrf
                 <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Cari Anggota (Filter Cepat)</label>
+                    <input type="text" id="memberFilterInput" oninput="filterAbsentMembers(this.value)" placeholder="Ketik nama atau NIM..." class="w-full mb-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-primary focus:bg-white">
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Pilih Anggota</label>
-                    <select name="user_id" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-primary focus:bg-white">
+                    <select id="absentMembersSelect" name="user_id" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-primary focus:bg-white">
                         <option value="">-- Pilih Nama Anggota --</option>
                         @foreach($absentMembers as $m)
-                            <option value="{{ $m->id }}">{{ $m->name }} ({{ $m->nim }} - {{ $m->university }})</option>
+                            <option value="{{ $m->id }}" data-search="{{ strtolower($m->name . ' ' . $m->nim . ' ' . $m->university) }}">
+                                {{ $m->name }} ({{ $m->nim }} - {{ $m->university }})
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -140,8 +152,15 @@
     let isProcessing = false;
     let autoDismissTimer = null;
 
-    // Web Audio API Beep Synthesizer
+    // Web Audio API Beep Synthesizer & Haptic Vibration
     function playBeep(isSuccess = true) {
+        // Haptic Feedback untuk smartphone lapangan
+        if ('vibrate' in navigator) {
+            try {
+                navigator.vibrate(isSuccess ? [100] : [200, 100, 200]);
+            } catch (e) {}
+        }
+
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = ctx.createOscillator();
@@ -258,15 +277,34 @@
             alert("Koneksi gagal saat memverifikasi QR: " + err);
         })
         .finally(() => {
+            const isFastScan = document.getElementById('fastScanToggle')?.checked;
+            const cooldown = isFastScan ? 1000 : 2500;
             setTimeout(() => {
                 isProcessing = false;
-                document.getElementById('scanStatusText').textContent = "Siap scan anggota berikutnya.";
-            }, 2500);
+                document.getElementById('scanStatusText').textContent = isFastScan 
+                    ? "⚡ Mode Cepat: Siap scan anggota berikutnya." 
+                    : "Siap scan anggota berikutnya.";
+            }, cooldown);
         });
     }
 
     function onScanError(errorMessage) {
         // Abaikan parse noise dari frame kamera
+    }
+
+    function filterAbsentMembers(query) {
+        const select = document.getElementById('absentMembersSelect');
+        const q = (query || '').toLowerCase().trim();
+        for (let i = 0; i < select.options.length; i++) {
+            const opt = select.options[i];
+            if (!opt.value) continue;
+            const searchData = opt.getAttribute('data-search') || opt.text.toLowerCase();
+            if (searchData.includes(q)) {
+                opt.style.display = '';
+            } else {
+                opt.style.display = 'none';
+            }
+        }
     }
 
     function showVerificationCard(data, type, message) {
